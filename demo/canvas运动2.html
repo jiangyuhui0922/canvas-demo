@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>canvas运动</title>
+<style>
+
+</style>
+</head>
+<body>
+	<canvas width="500" height="300" style="border:1px solid black" id="canvas"></canvas>
+	
+	<script>
+		var canvas = document.getElementById('canvas');
+		var ctx = canvas.getContext("2d");
+		
+		var father = {};
+		father.children = [];
+		/*
+		 * 增加孩子
+		 */
+		father.add = function (child) {
+			father.children.push(child);
+		}
+
+		/*
+		 * 矩形类
+		 */
+		function Rect (x, y, w, h, style) {
+			this.x = x;
+			this.y = y;
+			this.w = w;
+			this.h = h;
+			this.style = style;
+			father.add(this);
+			this.render = function () {
+				
+			}
+		}
+
+		// 生成一个随机位置、随机方向、随机速度、
+		// 随机颜色的矩形
+		function random () {
+			var x = Math.random() * 400;
+			var y = Math.random() * 200;
+			var w = Math.random() * 40 + 20;
+			var h = Math.random() * 40 + 20;
+			var colorr = Math.ceil(Math.random() * 256) - 1;//Math.ceil向正取整数
+			var colorg = Math.ceil(Math.random() * 256) - 1;
+			var colorb = Math.ceil(Math.random() * 256) - 1;
+			var color = "rgba("+colorr+","+colorg+","+colorb+",1)";
+			var t = new Rect(x,y,w,h,color);
+			t.dx = Math.ceil(Math.random()*2) - 1;
+			t.dy = Math.ceil(Math.random()*2) - 1;
+			t.speed = Math.ceil(Math.random()*3);
+			t.render = function () {
+				// left
+				if (this.dx == 0) {
+					this.x -= this.speed ;
+					if (this.x < 0) {
+						this.dx = 1;
+						this.x = 0;
+					};
+
+				// right
+				}else{
+					this.x += this.speed;
+					if (this.x > canvas.width - this.w) {
+						this.dx = 0;
+						this.x = canvas.width - this.w;
+					};
+				}
+
+				// 上
+				if (this.dy == 0) {
+					this.y -= this.speed ;
+					if (this.y < 0) {
+						this.dy = 1;
+						this.y = 0;
+					};
+
+				// 下
+				}else{
+					this.y += this.speed;
+					if (this.y > canvas.height - this.h) {
+						this.dy = 0;
+						this.y = canvas.height - this.h;
+					};
+				}
+				ctx.fillStyle = this.style;
+				ctx.fillRect(this.x,this.y,this.w,this.h);
+			}
+		}
+		// 生成10个随机矩形
+		for (var i = 0; i < 20; i++) {
+			random();
+		};
+		// 主时间轴计时器，控制所有对象的绘制
+		setInterval(function () {
+			ctx.clearRect(0,0,canvas.width,canvas.height);
+			for (var i = 0; i < father.children.length; i++) {
+				ctx.save();
+				father.children[i].render();
+				ctx.restore();
+			};
+		},10);
+
+
+	</script>
+</body>
+</html>

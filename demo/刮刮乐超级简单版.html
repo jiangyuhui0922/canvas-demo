@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>图形组合</title>
+		<style type="text/css">
+			*{
+				margin: 0;
+				padding: 0;
+			}
+			#cvs{
+				position: absolute;
+				left: 0;
+				top: 0;
+				border: 1px solid red;
+				box-shadow: 10px 10px 10px gray;
+				opacity:1;
+			}
+		</style>
+	</head>
+	<body>
+		<img src="2.jpg" alt="" />
+		<canvas id="cvs" width="446" height="446"></canvas>
+		<script type="text/javascript">
+			var cvs = document.getElementById('cvs');
+			var ctx = cvs.getContext('2d');
+//			绘制蒙层
+			ctx.fillStyle = "gray";
+			ctx.fillRect(0,0,cvs.width,cvs.height);
+//			开刮
+			cvs.onmousedown = function(){
+//				鼠标点下并且移动才会有刮的效果
+				cvs.onmousemove = function(e){
+					var ev = e||window.event;
+//					获取鼠标位置
+					var x = ev.clientX - cvs.offsetLeft;
+					var y = ev.clientY - cvs.offsetTop;
+//					设置图形组合方案
+					ctx.globalCompositeOperation = "destination-out";
+//					设置橡皮擦的形状
+					ctx.beginPath();
+					ctx.arc(x,y,25,0,Math.PI*2,false);
+					ctx.fillStyle = "red";
+					ctx.fill();
+//					获取画布上所有的像素点
+					var imgData = ctx.getImageData(0,0,cvs.width,cvs.height);
+//					获取像素数组
+					var imgPx = imgData.data;
+//					定义一个变量用来计数
+					var num = 0;
+					for(var i=3; i<imgPx.length; i+=4){
+//						判断a的值是否为0
+						if(imgPx[i] == 0){
+							num++;
+						}
+					}
+//					判断num是否达到总像素点数量的一半
+//					计算出画布上总的像素点个数
+					var all = imgPx.length/4;
+					if(num/all>=0.5){
+						cvs.style.opacity = "0";
+						cvs.style.transition = "all 3s";
+					}
+				}
+			}
+//			当鼠标松开的时候停止清除
+			document.onmouseup = function(){
+				cvs.onmousemove = null;
+			}
+		</script>
+	</body>
+</html>

@@ -1,0 +1,40 @@
+<!doctype html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>标题</title>
+	<meta name="keywords" content="">
+	<meta name="description" content="">
+	<style>
+		#cvs{border: 1px solid red;display: block;margin:0 auto;}
+	</style>
+</head>
+<body>
+	<canvas id="cvs" width="400" height="400"></canvas>
+	<script>
+	var cvs=document.getElementById('cvs');
+	var ctx=cvs.getContext('2d');
+	var n=0;
+	function circle (x,y,r,ang) {
+		var arcX=x+r*Math.cos(ang);//计算出当前小圆的圆心x坐标
+		var arcY=y+r*Math.sin(ang);
+		//计算出当前小圆的圆心y坐标
+		return [arcX,arcY];
+	}
+	function move () {
+		n++;
+		var angle=n*Math.PI/180;//换算成角度值
+		var x=circle(200,200,200,angle)[0];//得到小圆的圆心x坐标
+		var y=circle(200,200,200,angle)[1];
+		//得到小圆的圆心y坐标
+		//画出来小圆
+		ctx.beginPath();
+		ctx.arc(x,y,1,0,2*Math.PI,false);
+		ctx.fillStyle="red";
+		ctx.fill();
+		ctx.closePath();
+	}
+	setInterval(move,1);
+	</script>
+</body>
+</html>

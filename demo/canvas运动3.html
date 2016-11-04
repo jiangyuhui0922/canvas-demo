@@ -1,0 +1,90 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="utf-8"/>
+<title> New Document </title>
+<meta name="Keywords" content="">
+<meta name="Description" content="">
+<style type="text/css">
+	#canvas{position:absolute;left:0;top:0;}
+</style> 
+</head>
+<body> 
+<canvas id='canvas' width=800 height=500></canvas>
+<script type="text/javascript">
+	var canvas = document.getElementById('canvas');
+	var context = canvas.getContext('2d');
+	canvas.style.backgroundColor='#EEEEFF';
+	
+	document.onmousemove=move;
+	function move(e){
+		
+	}
+	
+	var arr=[];
+	var brr=[];
+	var crr=[];
+	var drr=[];
+	var t =null;
+	canvas.onmousedown = function(e){
+		var e = e || window.event;
+		
+		arr.push(e.clientX);
+		brr.push(e.clientY);
+		crr.push(400);//起始点x
+		drr.push(500);//起始点y
+		//redz(e.clientX,e.clientY);
+		run();
+	}
+	function redz(x,y){
+		context.save();
+		context.translate(400,500);
+		if(x<400){
+			var deg2 = Math.atan((500-y)/(400 - x))-Math.PI/2;
+			var dd = context.rotate(deg2);
+		}else{
+			var deg2 = Math.atan((500-y)/(400 - x ))+Math.PI/2;
+			var dd = context.rotate(deg2);
+		}
+		context.fillStyle='red';
+		context.fillRect(0,-50,4,50);
+		context.restore();
+	}
+	redz(200,200);
+	function run(){
+		context.clearRect(0,0,canvas.width,canvas.height);
+		if(t){
+			clearTimeout(t);
+		}
+		circilp();
+		for (var i=0;i<arr.length ;i++ )
+		{
+			redz(arr[arr.length-1],brr[brr.length-1]);
+			if(arr[i]<400){
+				crr[i]-=(400 - arr[i])/(500 - brr[i]);
+				drr[i]-=1;
+			}else{
+				crr[i]+=(arr[i] - 400)/(500 - brr[i]);
+				drr[i]-=1;
+			}
+			if(crr[i]<0||crr[i]>800||drr[i]<0){
+				arr.splice(i,1);
+				brr.splice(i,1);
+				crr.splice(i,1);
+				drr.splice(i,1);
+			}
+			context.strokeStyle='blue';
+			context.strokeRect(crr[i],drr[i],2,2);
+		}
+		t = setTimeout(run,2);
+	}
+	function circilp(){
+		context.beginPath();
+		context.arc(400,530,50,0,Math.PI,true);
+		context.closePath();
+		context.fill();
+	}
+	circilp();
+</script>
+</body>
+</html>

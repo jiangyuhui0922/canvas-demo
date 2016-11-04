@@ -1,0 +1,35 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>标题</title>
+<meta name="keywords" content="">
+<meta name="description" content="">
+	<style type="text/css">
+		body{background: #000;}
+		#cvs{border: 1px solid green; background: #c9c9c9;}
+	</style>
+</head>
+<body>
+	<canvas id="cvs" width="1200" height="500"></canvas>
+</body>
+<script>
+var cvs=document.getElementById('cvs');
+var ctx=cvs.getContext('2d');
+cvs.onmousedown=function (ev) {
+	var e=ev||window.event;
+	ctx.moveTo(e.clientX-cvs.offsetLeft,e.clientY-cvs.offsetTop);
+	document.onmousemove=function (ev) {
+		var e=ev||window.event;
+		ctx.lineTo(e.clientX-cvs.offsetLeft,e.clientY-cvs.offsetTop)
+		ctx.strokeStyle='red';
+		ctx.lineWidth=4;
+		ctx.stroke();
+	}
+	document.onmouseup=function () {
+		document.onmousemove=null;
+		document.onmouseup=null;
+	}
+}
+</script>
+</html>

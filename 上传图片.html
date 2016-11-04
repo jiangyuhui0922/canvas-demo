@@ -1,0 +1,67 @@
+<!doctype html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>标题</title>
+	<meta name="keywords" content="">
+	<meta name="description" content="">
+	<style>
+		.box{width: 400px;height: 400px;margin: 0 auto;}
+		#cvs{display: block;margin: 0 auto;margin-bottom: 10px;border:1px solid red;}
+		span{
+			width:100%;
+			position: relative;
+			height: 30px;
+			display: block;
+			line-height: 30px;
+			text-align: center;
+			background: green;
+			border-radius: 5px;
+		}
+		span input{position: absolute;left: 0px;top: 0px;opacity: 0;}
+	</style>
+</head>
+<body>
+	<div class="box">
+		<img src="" alt="" id="img">  
+		<!-- <canvas id="cvs" width="300" height="300"></canvas> -->
+		<span>
+			上传图像
+			<input type="file" name="" id="file1" value="提交文件">
+		</span>
+	</div>
+	<script>
+	// var cvs=document.getElementById('cvs');
+	// var ctx=cvs.getContext('2d');
+	var img=document.getElementById('img');
+	var file1=document.getElementById('file1');
+	if(typeof FileReader==='undefined'){//判定浏览器支不支持FileReader
+		alert("您的浏览器是老古董");
+	}else{
+		file1.addEventListener("change",upload,false);
+	}
+	function upload(){
+		// console.log(this.files[0]);
+		var file=this.files[0];//获取当前上传的文件
+		if(!/image\/\w+/.test(file.type)){
+			//判断当前文件的类型是否为图片
+			alert("看清楚，让你上传图片！！！");
+			return false;
+		}else{
+			var reader=new FileReader();//打开文件
+			reader.readAsDataURL(file);//将文件转化成base64编码图像
+			reader.onload=function(e){
+				// console.log(this);
+				// alert(this.result);//fileReader转化过base64编码之后返回的地址
+				// alert(e.target.result);
+				// var img=new Image();
+				// img.src=this.result;
+					
+				// ctx.clearRect(0,0,300,300);
+				// ctx.drawImage(img,0,0,300,300);
+			}
+		}
+	}
+	</script>
+</body>
+</html>
